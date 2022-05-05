@@ -1,6 +1,7 @@
 package graphics.shapes.ui;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import graphics.shapes.*;
@@ -154,16 +155,17 @@ public class ShapeDraftman implements ShapeVisitor {
 		}
 	}
 	
-	/*public void visitTable(STable table) {
-        Iterator<ArrayList<SRectangle>> shapes = table.iterator();
+	public void visitTable(STable table) {
+        Iterator<ArrayList<SRectangle>> shapes = table.iteratorRect();
         while(shapes.hasNext()) {
             Iterator<SRectangle> arrayIn = shapes.next().iterator();
             while(arrayIn.hasNext()) {
                 arrayIn.next().accept(this);
             }
         }
-        if(this.getSelectionAttributes(table).isSelected()){
-            drawHandler(table.getBounds());
+        if(getSelectionAttributes(table).isSelected()){
+        	drawHandler(table.getBounds());
+
         }
-    }*/
+    }
 }

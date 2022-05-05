@@ -8,5 +8,5 @@ public interface ShapeVisitor {
 	public void visitImage(SImage image);
 	public void visitGif(SGif gif);
 	public void visitCollection(SCollection collection);
-	//public void visitTable(STable table);
+	public void visitTable(STable table);
 }

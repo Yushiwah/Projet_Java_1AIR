@@ -6,6 +6,7 @@ import graphics.shapes.SGif;
 import graphics.shapes.SImage;
 import graphics.shapes.SPolygon;
 import graphics.shapes.SRectangle;
+import graphics.shapes.STable;
 import graphics.shapes.SText;
 import graphics.shapes.attributes.ColorAttributes;
 import graphics.shapes.attributes.FontAttributes;
@@ -40,6 +41,10 @@ public class Editor extends JFrame {
 		this.model = new SCollection();
 		this.model.addAttributes(new SelectionAttributes());
 		
+		STable tabl = new STable(5);
+        tabl.addAttributes(new SelectionAttributes());
+        this.model.add(tabl);
+		
 		SRectangle r = new SRectangle(new Point(10,10),20,30);
 		r.addAttributes(new ColorAttributes(true,true,Color.BLUE,Color.RED));
 		r.addAttributes(new SelectionAttributes());
@@ -53,11 +58,11 @@ public class Editor extends JFrame {
 		i.addAttributes(new SelectionAttributes());
 		this.model.add(g);
 		
-		int xPoints[] = {10, 25, 10, 25, 5, 45, 58, 56};
-		int yPoints[] = {10, 25, 25, 15, 50, 50, 20, 250};
-		SPolygon p = new SPolygon(xPoints, yPoints, 8);
+		int xPoints[] = {0,0,9,0,0,3,12,21,24,24,15,24,24,21,12,3};
+		int yPoints[] = {0,3,12,21,24,24,15,24,24,21,12,3,0,0,9,0};
+		SPolygon p = new SPolygon(xPoints, yPoints, 16);
 		p.translate(100, 100);
-		p.addAttributes(new ColorAttributes(true,true,Color.GREEN,Color.GRAY));
+		p.addAttributes(new ColorAttributes(true,false,Color.RED,Color.GRAY));
 		p.addAttributes(new SelectionAttributes());
 		this.model.add(p);
 		
@@ -77,6 +82,7 @@ public class Editor extends JFrame {
 		r.addAttributes(new ColorAttributes(true,false,Color.MAGENTA,Color.BLUE));
 		r.addAttributes(new SelectionAttributes());
 		sc.add(r);
+
 		c = new SCircle(new Point(150,100),20);
 		c.addAttributes(new ColorAttributes(false,true,Color.BLUE,Color.DARK_GRAY));
 		c.addAttributes(new SelectionAttributes());

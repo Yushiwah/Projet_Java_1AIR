@@ -54,32 +54,37 @@ public class SCollection extends Shape {
 	public void proportion() {
 		float moyx = 0;
 		float moyy = 0;
+		double maxx = shapes.get(0).getBounds().getCenterX();
+		double minx = shapes.get(0).getBounds().getCenterX();
+		double maxy = shapes.get(0).getBounds().getCenterY();
+		double miny = shapes.get(0).getBounds().getCenterY();
 		Iterator<Shape> it = iterator();
 		while(it.hasNext()) {
 			Rectangle rect = it.next().getBounds();
-			moyx += rect.x + ((float) rect.width)/2;
-			moyy += rect.y + ((float) rect.height)/2;
+			moyx += rect.getCenterX();
+			moyy += rect.getCenterY();
+			if(rect.getCenterX() < minx) {
+				minx = rect.getCenterX();
+			}
+			else if(rect.getCenterX() > maxx) {
+				maxx = rect.getCenterX();
+			}
+			if(rect.getCenterY() < miny) {
+				miny = rect.getCenterY();
+			}
+			else if(rect.getCenterY() > maxy) {
+				maxy = rect.getCenterY();
+			}
 		}
-		moyx /= shapes.size();
-		moyy /= shapes.size();
-		Rectangle bound = getBounds();
+		moyx /= propx.size();
+		moyy /= propy.size();
 		for(int i = 0; i < dxs.size(); i++) {
 			Rectangle r = shapes.get(i).getBounds();
-			if(bound.getWidth() > 0) {
-				if(r.x <= moyx) {
-					propx.set(i, (r.x - moyx)/bound.width);
-				}
-				else {
-					propx.set(i, (r.x + r.width - moyx)/bound.width);
-				}
+			if(maxx != minx) {
+					propx.set(i, ((float) r.getCenterX() - moyx)/(float) (maxx-minx));
 			}
-			if(bound.getHeight() > 0) {
-				if(r.y <= moyy) {
-					propy.set(i, (r.y - moyy)/bound.height);
-				}
-				else {
-					propy.set(i, (r.y + r.height - moyy)/bound.height);
-				}
+			if(maxy != miny) {
+				propy.set(i, ( (float)r.getCenterY() - moyy)/(float) (maxy-miny));
 			}
 		}
 	}
