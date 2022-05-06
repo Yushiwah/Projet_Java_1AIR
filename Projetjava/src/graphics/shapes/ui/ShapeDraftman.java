@@ -163,9 +163,41 @@ public class ShapeDraftman implements ShapeVisitor {
                 arrayIn.next().accept(this);
             }
         }
+        
+        Iterator<ArrayList<SImage>> images = table.iteratorImage();
+        while(images.hasNext()) {
+            Iterator<SImage> arrayIn = images.next().iterator();
+            while(arrayIn.hasNext()) {
+                arrayIn.next().accept(this);
+            }
+        }
         if(getSelectionAttributes(table).isSelected()){
         	drawHandler(table.getBounds());
-
         }
     }
+
+	public void visitSnake(SSnake snake) {
+		Iterator<SRectangle> it = snake.iterator();
+		while(it.hasNext()) {
+			it.next().accept(this);
+		}
+		if(getSelectionAttributes(snake).isSelected()){
+        	drawHandler(snake.getBounds());
+        }
+	}
+
+	public void visitField(SField field) {
+		Iterator<SRectangle> it = field.iterator();
+		while(it.hasNext()) {
+			it.next().accept(this);
+		}
+		Iterator<SImage> fruitIt = field.fruitsIterator();
+		while(fruitIt.hasNext()) {
+			fruitIt.next().accept(this);
+		}
+		field.getSnake().accept(this);
+		if(getSelectionAttributes(field).isSelected()){
+        	drawHandler(field.getBounds());
+        }
+	}
 }

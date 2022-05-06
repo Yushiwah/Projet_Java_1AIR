@@ -6,8 +6,11 @@ import graphics.ui.Controller;
 import graphics.ui.View;
 
 public class ShapesView extends View {
-	public ShapesView(Object model) {
+	public boolean snake;
+	
+	public ShapesView(Object model, boolean snake) {
 		super(model);
+		this.snake = snake;
 		this.setFocusable(true);
 		this.requestFocusInWindow();
 	}
@@ -15,7 +18,9 @@ public class ShapesView extends View {
 	protected void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
 		((Shape) this.getModel()).accept(new ShapeDraftman(graphics));
-		this.repaint();
+		if(!snake) {
+			this.repaint();
+		}
 	}
 
 	public Controller defaultController(Object model){

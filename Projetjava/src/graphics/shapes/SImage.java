@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -37,6 +38,18 @@ public class SImage extends Shape{
 		this.height = height;
 	}
 	
+	public SImage(File path, String fileName, Point loc){
+		try {
+			image = ImageIO.read(new File(path, fileName));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		this.loc = loc;
+		width = image.getWidth();
+		height = image.getHeight();
+	}
+	
+	
 	public Image getImage() {
 		return image;
 	}
@@ -50,7 +63,7 @@ public class SImage extends Shape{
 	}
 	
 	public Point getLoc() {
-		return loc;
+		return new Point(loc.x, loc.y);
 	}
 	
 	public int getWidth() {

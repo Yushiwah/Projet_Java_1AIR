@@ -28,7 +28,7 @@ public class SText extends Shape{
 	}
 	
 	public Point getLoc() {
-		return loc;
+		return new Point(loc.x, loc.y);
 	}
 	
 	public void setLoc(Point loc) {

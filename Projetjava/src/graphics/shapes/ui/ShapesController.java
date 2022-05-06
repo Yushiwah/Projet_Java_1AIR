@@ -6,7 +6,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import graphics.shapes.SCollection;
+import graphics.shapes.SField;
 import graphics.shapes.Shape;
+import graphics.shapes.Test;
 import graphics.shapes.attributes.SelectionAttributes;
 import graphics.ui.Controller;
 
@@ -14,7 +16,9 @@ public class ShapesController extends Controller {
 	private boolean canMove = false;
 	private boolean canZoom = false;
 	private Point lastLocation;
-
+	public int direction;
+	private boolean first = true;
+	
 	public ShapesController(Object model) {
 		super(model);
 	}
@@ -106,18 +110,38 @@ public class ShapesController extends Controller {
 		lastLocation = e.getPoint();
 	}
 	
-	/*public void keyTyped(KeyEvent e) {
-		System.out.println("test2");
-    }
-
 	public void keyPressed(KeyEvent evt) {
-    	System.out.println("test");
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-        	System.out.println("test");
+        if(evt.getKeyCode() >= 37 && evt.getKeyCode() <= 40){
+        	if(first) {
+        		direction = evt.getKeyCode() - 37;
+        		first = false;
+        		Iterator<Shape> it = ((SCollection) this.getModel()).iterator();
+        		Thread t = new Test(this, ((SField) it.next()).getSnake());
+        		t.start();
+        	}
+        	else {
+        		if(direction+2 != evt.getKeyCode() - 37 && direction-2 != evt.getKeyCode() - 37) {
+        			direction = evt.getKeyCode() - 37;
+        		}
+        	}
         }
     }
 	
-    public void keyReleased(KeyEvent e) {
-    	System.out.println("test3");
+	
+	/*public void keyPressed(KeyEvent evt) {
+        if(evt.getKeyCode() >= 37 && evt.getKeyCode() <= 40){
+        	if(first) {
+        		direction = evt.getKeyCode() - 37;
+        		first = false;
+        		Thread t = new Test(this, ((SField) this.getModel()).getSnake());
+        		t.start();
+        	}
+        	else {
+        		if(direction+2 != evt.getKeyCode() - 37 && direction-2 != evt.getKeyCode() - 37) {
+        			direction = evt.getKeyCode() - 37;
+        		}
+        	}
+        }
     }*/
+    
 }

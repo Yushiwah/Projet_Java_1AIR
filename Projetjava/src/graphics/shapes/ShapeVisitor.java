@@ -9,4 +9,6 @@ public interface ShapeVisitor {
 	public void visitGif(SGif gif);
 	public void visitCollection(SCollection collection);
 	public void visitTable(STable table);
+	public void visitSnake(SSnake snake);
+	public void visitField(SField field);
 }

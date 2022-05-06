@@ -3,43 +3,56 @@ package graphics.shapes;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 import javax.swing.JButton;
 
 public class STable extends Shape{
 
-	private ArrayList<ArrayList<SText>> tableText = new ArrayList<ArrayList<SText>>(); 
+	private ArrayList<ArrayList<SImage>> tableImage = new ArrayList<ArrayList<SImage>>(); 
 	private ArrayList<ArrayList<SRectangle>> tableRect = new ArrayList<ArrayList<SRectangle>>(); 
-	private ArrayList<ArrayList<JButton>> tableButton = new ArrayList<ArrayList<JButton>>();  
+	private ArrayList<ArrayList<Integer>> tableInt = new ArrayList<ArrayList<Integer>>();  
 	private Point loc;
 	private int n;
-	private int height = 20;
-	private float realHeight = 20;
-	private int width = 20;
-	private float realWidth = 20;
+	private int height = 26;
+	private float realHeight = 26;
+	private int width = 26;
+	private float realWidth = 26;
 	
 	public STable(int n) {
 		loc = new Point(0, 0);
 		this.n = n;
-		ArrayList<SText> listText;
+		ArrayList<SImage> listImage;
 		ArrayList<SRectangle> listRect;
-		ArrayList<JButton> listButton;
-		JButton button = new JButton("button");
-		button.setBackground(Color.LIGHT_GRAY);
+		ArrayList<Integer> listInt;
 		for(int i = 0; i < n; i++) {
 			listRect = new ArrayList<SRectangle>();
-			listText = new ArrayList<SText>();
-			listButton = new ArrayList<JButton>();
+			listImage = new ArrayList<SImage>();
+			listInt = new ArrayList<Integer>();
 			for(int j = 0; j < n; j++ ) {
 				listRect.add(new SRectangle(new Point(width*i, height*j), width, height));
-				listText.add(new SText(new Point(width*i, height*j), "1"));
-				listButton.add(new JButton());
+				listInt.add(0);
 			}
 			tableRect.add(listRect);
-			tableText.add(listText);
-			tableButton.add(listButton);
+			tableInt.add(listInt);
+		}
+		bombPlacer(tableInt, n);
+		for(int i = 0; i < n; i++) {
+			listInt = new ArrayList<Integer>();
+			listImage = new ArrayList<SImage>();
+			for(int j = 0; j < n; j++) {
+				int valueOfTable = this.tableInt.get(i).get(j);
+				if(valueOfTable >= 10) {
+					listImage.add(new SImage(new File("src/image"), "mine.gif", new Point(height*i, width*j)));
+				}
+				else {
+					listImage.add(new SImage(new File("src/image"), valueOfTable + ".png", new Point(height*i, width*j)));
+				}
+			}
+			tableImage.add(listImage);
 		}
 	}
 	
@@ -47,16 +60,36 @@ public class STable extends Shape{
 		return tableRect.iterator();
 	}
 	
-	public Iterator<ArrayList<SText>> iteratorText() {
-		return tableText.iterator();
+	public Iterator<ArrayList<SImage>> iteratorImage() {
+		return tableImage.iterator();
 	}
 	
-	public Iterator<ArrayList<JButton>> iteratorButton() {
-		return tableButton.iterator();
+	public int randomNumber() {
+		Random random = new Random();
+		return random.nextInt(0, 12);
+	}
+	
+	public void bombPlacer( ArrayList<ArrayList<Integer>> table, int n){
+		int i = 0;
+		while( i < 10 ) {
+			int random1 = randomNumber();
+			int random2 = randomNumber();
+			if(table.get(random1).get(random2) < 10) {
+				table.get(random1).set(random2, 10);
+				i++;
+				for(int k = Math.max(0, random1 - 1) ; k <= Math.min( random1 + 1, n - 1) ; k++) {
+					for(int j = Math.max(0, random2 - 1); j <= Math.min(random2 + 1, n - 1); j++) {
+						int pdk = table.get(k).get(j);
+						table.get(k).set(j, pdk + 1);
+					}
+				}
+			}
+		}
+		this.tableInt = table;
 	}
 	
 	public Point getLoc() {
-		return this.loc;
+		return new Point(loc.x, loc.y);
 	}
 
 	public void setLoc(Point point) {
@@ -68,6 +101,7 @@ public class STable extends Shape{
 		for(int i = 0; i < n; i++) {
 			for(int j = 0; j < n; j++ ) {
 				tableRect.get(i).get(j).translate(x, y);
+				tableImage.get(i).get(j).translate(x, y);
 			}
 		}
 	}
@@ -83,6 +117,8 @@ public class STable extends Shape{
 				dy = (int) realHeight - height;
 				tableRect.get(i).get(j).zoom(dx, dy);
 				tableRect.get(i).get(j).translate(dx*i, dy*j);
+				tableImage.get(i).get(j).zoom(dx, dy);
+				tableImage.get(i).get(j).translate(dx*i, dy*j);
 			}
 		}
 		width = (int) realWidth;
