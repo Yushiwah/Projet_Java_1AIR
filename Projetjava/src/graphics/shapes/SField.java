@@ -3,7 +3,6 @@ package graphics.shapes;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -42,7 +41,7 @@ public class SField extends Shape {
 			int y = ((int) (Math.random()*height)) * spaceSize + loc.x;
 			Point candidate = new Point(x, y);
 			if(!snake.isInSnake(candidate) && !(snake.getHead().getBounds().contains(candidate))) {
-				fruits.add(new SImage(new File("src/image"), "fruitSprite.png",candidate));
+				fruits.add(new SImage("fruitSprite.png",candidate, spaceSize, spaceSize));
 				fruits.get(fruits.size()-1).addAttributes(new ColorAttributes(true, true, Color.ORANGE, Color.BLACK));
 			}
 		}

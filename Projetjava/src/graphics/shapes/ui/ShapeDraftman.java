@@ -156,28 +156,42 @@ public class ShapeDraftman implements ShapeVisitor {
 	}
 	
 	public void visitTable(STable table) {
-        Iterator<ArrayList<SRectangle>> shapes = table.iteratorRect();
+        Iterator<ArrayList<SImage>> shapes = table.iterator();
         while(shapes.hasNext()) {
-            Iterator<SRectangle> arrayIn = shapes.next().iterator();
+            Iterator<SImage> arrayIn = shapes.next().iterator();
             while(arrayIn.hasNext()) {
-                arrayIn.next().accept(this);
+                SImage image = arrayIn.next();
+                if(((MinesweeperAttributes) image.getAttributes(MinesweeperAttributes.id)).isDiscovered()) {
+                	if(image.getName().equals("mine.gif")) {
+                        // fonction d'affichage perdu
+                		table.lose();
+                    }
+                    else {
+                        if(table.getWin()) {
+                            // affiche win
+                        }
+                        else {
+                        image.accept(this);
+                        }
+                    }                }
+                else if(((MinesweeperAttributes) image.getAttributes(MinesweeperAttributes.id)).isFlagged()) {
+                	System.out.println("x = " + image.getLoc().x + " , y = " + image.getLoc().y);
+                    (new SImage("drapeau.png", image.getLoc(), table.getWidth(), table.getHeight())).accept(this);
+                }
+                else {
+                    Point loc = image.getLoc();
+                    graphics.setColor(Color.black);
+                    graphics.drawRect(loc.x, loc.y, table.getWidth(), table.getHeight());
+                }
             }
         }
-        
-        Iterator<ArrayList<SImage>> images = table.iteratorImage();
-        while(images.hasNext()) {
-            Iterator<SImage> arrayIn = images.next().iterator();
-            while(arrayIn.hasNext()) {
-                arrayIn.next().accept(this);
-            }
-        }
-        if(getSelectionAttributes(table).isSelected()){
-        	drawHandler(table.getBounds());
+        if(this.getSelectionAttributes(table).isSelected()){
+            this.drawHandler(table.getBounds());
         }
     }
 
 	public void visitSnake(SSnake snake) {
-		Iterator<SRectangle> it = snake.iterator();
+		Iterator<SImage> it = snake.iterator();
 		while(it.hasNext()) {
 			it.next().accept(this);
 		}

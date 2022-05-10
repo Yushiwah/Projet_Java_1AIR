@@ -7,10 +7,12 @@ import graphics.ui.View;
 
 public class ShapesView extends View {
 	public boolean snake;
+	public boolean minesweeper;
 	
-	public ShapesView(Object model, boolean snake) {
-		super(model);
+	public ShapesView(Object model, boolean snake, boolean minesweeper) {
+		super(model, snake, minesweeper);
 		this.snake = snake;
+		this.minesweeper = minesweeper;
 		this.setFocusable(true);
 		this.requestFocusInWindow();
 	}
@@ -18,12 +20,18 @@ public class ShapesView extends View {
 	protected void paintComponent(Graphics graphics) {
 		super.paintComponent(graphics);
 		((Shape) this.getModel()).accept(new ShapeDraftman(graphics));
-		if(!snake) {
+		if(!snake && !minesweeper) {
 			this.repaint();
 		}
 	}
 
-	public Controller defaultController(Object model){
-        return new ShapesController(this.getModel());
+	public Controller defaultController(Object model, boolean snake, boolean minesweeper) {
+		if(snake) {
+			return new SnakeController(getModel());
+		}
+		if(minesweeper) {
+			return new MinesweeperController(getModel());
+		}
+        return new ShapesController(getModel());
     }
 }

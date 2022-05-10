@@ -10,17 +10,16 @@ import graphics.shapes.attributes.ColorAttributes;
 
 public class SSnake extends Shape {
 	private SField field;
-	private ArrayList<SRectangle> snake;
+	private ArrayList<SImage> snake;
 	private int spaceSize;
 	
 	public SSnake(SField field) {
 		this.field = field;
 		spaceSize = field.spaceSize;
-		snake = new ArrayList<SRectangle>();
+		snake = new ArrayList<SImage>();
 		Point loc = field.getLoc();
-		SRectangle r = new SRectangle(new Point(loc.x + field.getWidth()/2*spaceSize, loc.y + field.getHeight()/2*spaceSize), spaceSize, spaceSize);
-		r.addAttributes(new ColorAttributes(true, true, Color.RED, Color.BLACK));
-		snake.add(r);
+		SImage i = new SImage("head1.png",new Point(loc.x + field.getWidth()/2*spaceSize, loc.y + field.getHeight()/2*spaceSize), spaceSize, spaceSize);
+		snake.add(i);
 	}
 	
 	public Point getLoc() {
@@ -32,7 +31,7 @@ public class SSnake extends Shape {
 		translate(point.x - loc.x, point.y - loc.y);
 	}
 	
-	public SRectangle getHead() {
+	public SImage getHead() {
 		return snake.get(0);
 	}
 	
@@ -51,6 +50,7 @@ public class SSnake extends Shape {
 			return false;
 		}
 		snake.get(0).setLoc(locInter);
+		snake.get(0).setImage("head" + direction + ".png");
 		if(snake.size() < 4 || isEating()) {
 			grow = true;
 		}
@@ -63,7 +63,7 @@ public class SSnake extends Shape {
 			loc = locInter;
 		}
 		if(grow) {
-			snake.add(new SRectangle(loc, spaceSize, spaceSize));
+			snake.add(new SImage("tail" + 0 + ".png", loc, spaceSize, spaceSize));
 			if(snake.size()%2 == 1) {
 				snake.get(snake.size()-1).addAttributes(new ColorAttributes(true,true, new Color(0, 125, 0), Color.BLACK));
 			}
@@ -90,7 +90,7 @@ public class SSnake extends Shape {
 	}
 	
 	public boolean isInSnake(Point loc) {
-		Iterator<SRectangle> it = iterator();
+		Iterator<SImage> it = iterator();
 		it.next();
 		while(it.hasNext()) {
 			Rectangle r = it.next().getBounds();
@@ -102,7 +102,7 @@ public class SSnake extends Shape {
 	}
 
 	public void translate(int x, int y) {
-		Iterator<SRectangle> it = iterator();
+		Iterator<SImage> it = iterator();
 		while(it.hasNext()) {
 			it.next().translate(x, y);
 		}
@@ -112,13 +112,13 @@ public class SSnake extends Shape {
 		
 	}
 	
-	public Iterator<SRectangle> iterator() {
+	public Iterator<SImage> iterator() {
 		return snake.iterator();
 	}
 
 	public Rectangle getBounds() {
 		if(snake.size() > 0) {
-			Iterator<SRectangle> it = iterator();
+			Iterator<SImage> it = iterator();
 			Rectangle r = it.next().getBounds();
 			while(it.hasNext()) {
 				r = r.union(it.next().getBounds());

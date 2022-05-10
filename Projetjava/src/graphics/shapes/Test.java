@@ -1,12 +1,12 @@
 package graphics.shapes;
 
-import graphics.shapes.ui.ShapesController;
+import graphics.ui.Controller;
 
 public class Test extends Thread {
-	private ShapesController s;
+	private Controller s;
 	private SSnake snake;
 	
-	public Test(ShapesController s, SSnake snake) {
+	public Test(Controller s, SSnake snake) {
 		this.s = s;
 		this.snake = snake;
 	}

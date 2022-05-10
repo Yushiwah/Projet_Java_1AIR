@@ -13,42 +13,41 @@ import javax.imageio.ImageIO;
 public class SImage extends Shape{
 	private Point loc;
 	private BufferedImage image;
-	int width;
-	int height;
+	private String name;
+	private int width;
+	private int height;
 	
-	public SImage(String url, Point loc){
+	public SImage(String url, Point loc) {
+		name = url;
 		try {
 			image = ImageIO.read(new URL(url));
 		} catch (IOException e) {
-			e.printStackTrace();
+			try {
+				image = ImageIO.read(new File("src/image", url));
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		}
 		this.loc = loc;
 		width = image.getWidth();
 		height = image.getHeight();
 	}
 	
-	public SImage(String url, Point loc, int height, int width){
+	public SImage(String url, Point loc, int height, int width) {
+		name = url;
 		try {
 			image = ImageIO.read(new URL(url));
 		} catch (IOException e) {
-			e.printStackTrace();
+			try {
+				image = ImageIO.read(new File("src/image", url));
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		}
 		this.loc = loc;
 		this.width = width;
 		this.height = height;
 	}
-	
-	public SImage(File path, String fileName, Point loc){
-		try {
-			image = ImageIO.read(new File(path, fileName));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		this.loc = loc;
-		width = image.getWidth();
-		height = image.getHeight();
-	}
-	
 	
 	public Image getImage() {
 		return image;
@@ -58,7 +57,11 @@ public class SImage extends Shape{
 		try {
 			image = ImageIO.read(new URL(url));
 		} catch (IOException e) {
-			e.printStackTrace();
+			try {
+				image = ImageIO.read(new File("src/image", url));
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 	
@@ -72,6 +75,10 @@ public class SImage extends Shape{
 	
 	public int getHeight() {
 		return height;
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 	public void setLoc(Point point) {

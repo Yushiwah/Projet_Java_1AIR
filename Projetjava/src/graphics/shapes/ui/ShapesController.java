@@ -16,7 +16,6 @@ public class ShapesController extends Controller {
 	private boolean canMove = false;
 	private boolean canZoom = false;
 	private Point lastLocation;
-	public int direction;
 	private boolean first = true;
 	
 	public ShapesController(Object model) {
@@ -126,22 +125,4 @@ public class ShapesController extends Controller {
         	}
         }
     }
-	
-	
-	/*public void keyPressed(KeyEvent evt) {
-        if(evt.getKeyCode() >= 37 && evt.getKeyCode() <= 40){
-        	if(first) {
-        		direction = evt.getKeyCode() - 37;
-        		first = false;
-        		Thread t = new Test(this, ((SField) this.getModel()).getSnake());
-        		t.start();
-        	}
-        	else {
-        		if(direction+2 != evt.getKeyCode() - 37 && direction-2 != evt.getKeyCode() - 37) {
-        			direction = evt.getKeyCode() - 37;
-        		}
-        	}
-        }
-    }*/
-    
 }

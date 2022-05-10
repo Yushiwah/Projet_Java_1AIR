@@ -7,9 +7,9 @@ public abstract class View extends JPanel {
 	private Object model;
 	private Controller controller;
 
-	public View(Object model) {
+	public View(Object model, boolean snake, boolean minesweeper) {
 		this.model = model;
-		controller = defaultController(model);
+		controller = defaultController(model, snake, minesweeper);
 		controller.setView(this);
 		this.addMouseListener(controller);
 		this.addMouseMotionListener(controller);
@@ -25,7 +25,7 @@ public abstract class View extends JPanel {
 		return model;
 	}
 	
-	public Controller defaultController(Object model) {
+	public Controller defaultController(Object model, boolean snake, boolean minesweeper) {
 		return new Controller(model);
 	}
 	

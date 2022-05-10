@@ -17,7 +17,6 @@ import graphics.shapes.attributes.SelectionAttributes;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.io.File;
 
 import javax.swing.JFrame;
 
@@ -25,6 +24,7 @@ public class Editor extends JFrame {
 	ShapesView sview;
 	Shape model;
 	public boolean snake;
+	public boolean minesweeper;
 	
 	public Editor() {
 		super("Shapes Editor");
@@ -37,7 +37,7 @@ public class Editor extends JFrame {
 		
 		this.buildModel();
 		
-		this.sview = new ShapesView(this.model, snake);
+		this.sview = new ShapesView(this.model, snake, minesweeper);
 		this.sview.setPreferredSize(new Dimension(61*16+20,41*16+20));
 		this.getContentPane().add(this.sview, java.awt.BorderLayout.CENTER);
 	}
@@ -45,28 +45,33 @@ public class Editor extends JFrame {
 	
 	private void buildModel() {
 		snake = false;
+		minesweeper = true;
 		
 		if(snake) {
 			model = new SField(new Point(10,10), 16, 61, 41, 10);
 			model.addAttributes(new SelectionAttributes());
-			
 			SSnake s = new SSnake((SField) model);
 			s.addAttributes(new SelectionAttributes());
 			((SField) model).setSnake(s);
 		}
 		
+		else if(minesweeper) {
+			model = new STable(20, 50);
+			model.addAttributes(new SelectionAttributes());
+		}
+		
 		else {
 			this.model = new SCollection();
 			
-			SField f = new SField(new Point(10,10), 10, 75, 75, 5);
+			/*SField f = new SField(new Point(10,10), 10, 75, 75, 5);
 			f.addAttributes(new SelectionAttributes());
 			
 			SSnake s = new SSnake(f);
 			s.addAttributes(new SelectionAttributes());
 			f.setSnake(s);
 			((SCollection) this.model).add(f);
-			
-			STable tabl = new STable(13);
+			*/
+			STable tabl = new STable(20, 20);
 	        tabl.addAttributes(new SelectionAttributes());
 	        ((SCollection) this.model).add(tabl);
 			
@@ -79,7 +84,7 @@ public class Editor extends JFrame {
 			i.addAttributes(new SelectionAttributes());
 			((SCollection) this.model).add(i);
 			
-			i = new SImage(new File("src/image"), "fruitSprite.png", new Point(50,50));
+			i = new SImage("fruitSprite.png", new Point(50,50));
 			i.addAttributes(new SelectionAttributes());
 			((SCollection) this.model).add(i);
 			

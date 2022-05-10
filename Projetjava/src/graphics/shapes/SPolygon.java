@@ -19,7 +19,7 @@ public class SPolygon extends Shape {
 		ys = new ArrayList<Float>();
 		float moyx = 0;
 		float moyy = 0;
-		for(int i = 0; i < nPoints; i++) {
+		for(int i = 0; i < nPoints; i++) {  // calcule du point moyen
 			xs.add((float) xPoints[i]);
 			ys.add((float) yPoints[i]);
 			moyx += xs.get(i);
@@ -30,7 +30,7 @@ public class SPolygon extends Shape {
 		propx = new ArrayList<Float>();
 		propy = new ArrayList<Float>();
 		Rectangle Bound = this.getBounds();
-		for(int i = 0; i < xs.size(); i++) {
+		for(int i = 0; i < xs.size(); i++) {   // calcule les proportions
 			if(Bound.width != 0) {
 				propx.add((xs.get(i) - moyx)/Bound.width);
 			}
@@ -65,7 +65,7 @@ public class SPolygon extends Shape {
 	
 	public void zoom(int dx, int dy) {
 		if(xs.size() > 0) {
-			Point startLoc= this.getLoc();
+			Point startLoc = this.getLoc();
 			for(int i=0; i < xs.size(); i++) {
 				xs.set(i, xs.get(i) + dx*propx.get(i));
 				ys.set(i, ys.get(i) + dy*propy.get(i));
@@ -105,10 +105,7 @@ public class SPolygon extends Shape {
 
 	public void translate(int x, int y) {
 		polygon.translate(x, y);
-		for(int i = 0; i < xs.size(); i++) {
-			xs.set(i, xs.get(i) + x);
-			ys.set(i, ys.get(i) + y);
-		}
+
 	}
 	
 	public int getNbPoint() {
