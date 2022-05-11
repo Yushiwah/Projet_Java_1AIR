@@ -9,7 +9,6 @@ import java.awt.event.MouseMotionListener;
 public class Controller implements MouseListener, MouseMotionListener, KeyListener {
 	private Object model;
 	private View view;	
-	public int direction;
 
 	
 	public Controller(Object model) {

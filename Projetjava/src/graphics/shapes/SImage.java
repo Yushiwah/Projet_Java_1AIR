@@ -33,7 +33,7 @@ public class SImage extends Shape{
 		height = image.getHeight();
 	}
 	
-	public SImage(String url, Point loc, int height, int width) {
+	public SImage(String url, Point loc, int width, int height) {
 		name = url;
 		try {
 			image = ImageIO.read(new URL(url));

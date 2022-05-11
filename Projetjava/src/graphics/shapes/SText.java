@@ -35,6 +35,14 @@ public class SText extends Shape{
 		this.loc = loc;
 	}
 	
+	public void setSize(int size) {
+		FontAttributes font = (FontAttributes) this.getAttributes(FontAttributes.id);
+		font.setSize(size);
+		Rectangle bound = font.getBounds(text);
+		width = bound.width;
+		height= bound.height;
+	}
+	
 	public void translate(int dx, int dy) {
 		loc.translate(dx, dy);
 	}

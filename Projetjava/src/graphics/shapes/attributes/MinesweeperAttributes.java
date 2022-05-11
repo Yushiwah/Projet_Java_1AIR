@@ -3,12 +3,19 @@ package graphics.shapes.attributes;
 public class MinesweeperAttributes extends Attributes{
 
     public static final String id="minesweeper";
-    private boolean discovered;
-    private boolean flagged;
+    public boolean discovered;
+    public boolean flagged;
     
     public MinesweeperAttributes(){
         flagged = false;
         discovered = false;
+    }
+    
+    public MinesweeperAttributes clone() {
+    	MinesweeperAttributes attributes =  new MinesweeperAttributes();
+    	attributes.flagged = flagged;
+    	attributes.discovered = discovered;
+    	return attributes;
     }
     
     public boolean isFlagged() {

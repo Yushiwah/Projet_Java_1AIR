@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import javax.swing.ImageIcon;
 
 public class SGif extends Shape{
@@ -17,7 +18,7 @@ public class SGif extends Shape{
 		try {
 			image = new ImageIcon(new URL(url)).getImage();
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			image = new ImageIcon("src/image/" + url).getImage();
 		}
 		this.loc = loc;
 		width = image.getWidth(null);
@@ -28,7 +29,7 @@ public class SGif extends Shape{
 		try {
 			image = new ImageIcon(new URL(url)).getImage();
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			image = new ImageIcon("src/image/" + url).getImage();
 		}
 		this.loc = loc;
 		this.width = width;

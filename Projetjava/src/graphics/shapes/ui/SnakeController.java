@@ -3,11 +3,12 @@ package graphics.shapes.ui;
 import java.awt.event.KeyEvent;
 
 import graphics.shapes.SField;
-import graphics.shapes.Test;
+import graphics.shapes.thread.SnakeThread;
 import graphics.ui.Controller;
 
 public class SnakeController extends Controller {
 	private boolean first = true;
+	private int direction;
 	
 	public SnakeController(Object model) {
 		super(model);
@@ -18,7 +19,7 @@ public class SnakeController extends Controller {
         	if(first) {
         		direction = evt.getKeyCode() - 37;
         		first = false;
-        		Thread t = new Test(this, ((SField) this.getModel()).getSnake());
+        		Thread t = new SnakeThread(this, ((SField) this.getModel()).getSnake());
         		t.start();
         	}
         	else {
@@ -28,4 +29,8 @@ public class SnakeController extends Controller {
         	}
         }
     }
+	
+	public int getDirection() {
+		return direction;
+	}
 }

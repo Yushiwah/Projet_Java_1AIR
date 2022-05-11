@@ -1,12 +1,10 @@
 package graphics.shapes;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import graphics.shapes.attributes.ColorAttributes;
+import graphics.ui.View;
 
 public class SSnake extends Shape {
 	private SField field;
@@ -35,43 +33,84 @@ public class SSnake extends Shape {
 		return snake.get(0);
 	}
 	
-	public boolean move(int direction) {
+	public boolean move(int direction, View view) {
 		Point loc = snake.get(0).getLoc();
-		Point locInter = snake.get(0).getLoc();
+		Point locAfter = snake.get(0).getLoc();
+		Point locBefore;
 		if(direction != 3) {
-			locInter.translate(spaceSize*(direction-1), spaceSize*(direction-2)*direction);
+			locAfter.translate(spaceSize*(direction-1), spaceSize*(direction-2)*direction);
 		}
 		else {
-			locInter.translate(0, 1 * spaceSize);
+			locAfter.translate(0, 1 * spaceSize);
 		}
 		boolean grow;
-		boolean end = isInSnake(locInter) || (locInter.x < field.getLoc().x) || (locInter.y < field.getLoc().y) || (locInter.x >= field.getLoc().x + field.getWidth()*spaceSize) || (locInter.y >= field.getLoc().y + field.getHeight()*spaceSize);
+		boolean end = isInSnake(locAfter) || (locAfter.x < field.getLoc().x) || (locAfter.y < field.getLoc().y) || (locAfter.x >= field.getLoc().x + field.getWidth()*spaceSize) || (locAfter.y >= field.getLoc().y + field.getHeight()*spaceSize);
 		if(end) {
+			field.gameOver();
 			return false;
 		}
-		snake.get(0).setLoc(locInter);
+		snake.get(0).setLoc(locAfter);
 		snake.get(0).setImage("head" + direction + ".png");
-		if(snake.size() < 4 || isEating()) {
-			grow = true;
-		}
-		else {
-			grow = false;
-		}
+		grow = snake.size() < 4 || isEating();
+		locBefore = locAfter;
+		int snakePart;
 		for(int i = 1; i < snake.size(); i++) {
-			locInter = snake.get(i).getLoc();
-			snake.get(i).setLoc(loc);
-			loc = locInter;
-		}
-		if(grow) {
-			snake.add(new SImage("tail" + 0 + ".png", loc, spaceSize, spaceSize));
-			if(snake.size()%2 == 1) {
-				snake.get(snake.size()-1).addAttributes(new ColorAttributes(true,true, new Color(0, 125, 0), Color.BLACK));
+			snakePart = 0;
+			locAfter = snake.get(i).getLoc();
+			
+			if(loc.x > locBefore.x) {
+				snakePart += 1;
+			}
+			else if(loc.x < locBefore.x) {
+				snakePart += 2;
+			}
+			else if(loc.y > locBefore.y) {
+				snakePart += 3;
 			}
 			else {
-				snake.get(snake.size()-1).addAttributes(new ColorAttributes(true,true, new Color(0, 255, 0), Color.BLACK));
+				snakePart += 5;
 			}
+			if(loc.x > locAfter.x) {
+				snakePart += 1;
+			}
+			else if(loc.x < locAfter.x) {
+				snakePart += 2;
+			}
+			else if(loc.y > locAfter.y) {
+				snakePart += 3;
+			}
+			else {
+				snakePart += 5;
+			}
+			snake.get(i).setLoc(loc);
+			snake.get(i).setImage("snake" + snakePart + ".png");
+			locBefore = loc;
+			loc = locAfter;
+		}
+		if(!grow) {
+			loc = locBefore;
+			locBefore = snake.get(snake.size()-2).getLoc();
+		}
+		if(loc.x > locBefore.x) {
+			snakePart = 0;
+		}
+		else if(loc.x < locBefore.x) {
+			snakePart = 2;
+		}
+		else if(loc.y > locBefore.y) {
+			snakePart = 1;
+		}
+		else {
+			snakePart = 3;
+		}
+		if(grow) {
+			snake.add(new SImage("tail" + snakePart + ".png", loc, spaceSize, spaceSize));
+		}
+		else {
+			snake.get(snake.size()-1).setImage("tail" + snakePart + ".png");
 		}
 		field.addFruit();
+		view.repaint();
 		return true;
 	}
 	
@@ -102,10 +141,6 @@ public class SSnake extends Shape {
 	}
 
 	public void translate(int x, int y) {
-		Iterator<SImage> it = iterator();
-		while(it.hasNext()) {
-			it.next().translate(x, y);
-		}
 	}
 
 	public void zoom(int x, int y) {

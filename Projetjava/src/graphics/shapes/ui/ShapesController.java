@@ -6,10 +6,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import graphics.shapes.SCollection;
+import graphics.shapes.SDraw;
 import graphics.shapes.SField;
 import graphics.shapes.Shape;
-import graphics.shapes.Test;
 import graphics.shapes.attributes.SelectionAttributes;
+import graphics.shapes.thread.SnakeThread;
 import graphics.ui.Controller;
 
 public class ShapesController extends Controller {
@@ -17,6 +18,7 @@ public class ShapesController extends Controller {
 	private boolean canZoom = false;
 	private Point lastLocation;
 	private boolean first = true;
+	private SDraw draw;
 	
 	public ShapesController(Object model) {
 		super(model);
@@ -81,6 +83,10 @@ public class ShapesController extends Controller {
 					lastLocation = e.getPoint();
 				}
 			}
+			if(!canZoom) {
+				draw = new SDraw(e.getPoint());
+	            ((SCollection)this.getModel()).add(draw);
+			}
 		}
 	}
 	
@@ -103,26 +109,12 @@ public class ShapesController extends Controller {
 		if(canMove) {
 			translateSelected(e.getX() - lastLocation.x, e.getY() - lastLocation.y);
 		}
-		if(canZoom) {
+		else if(canZoom) {
 			zoomSelected(e.getX() - lastLocation.x, e.getY() - lastLocation.y);
+		}
+		else {
+			draw.addPoint(e.getPoint());
 		}
 		lastLocation = e.getPoint();
 	}
-	
-	public void keyPressed(KeyEvent evt) {
-        if(evt.getKeyCode() >= 37 && evt.getKeyCode() <= 40){
-        	if(first) {
-        		direction = evt.getKeyCode() - 37;
-        		first = false;
-        		Iterator<Shape> it = ((SCollection) this.getModel()).iterator();
-        		Thread t = new Test(this, ((SField) it.next()).getSnake());
-        		t.start();
-        	}
-        	else {
-        		if(direction+2 != evt.getKeyCode() - 37 && direction-2 != evt.getKeyCode() - 37) {
-        			direction = evt.getKeyCode() - 37;
-        		}
-        	}
-        }
-    }
 }

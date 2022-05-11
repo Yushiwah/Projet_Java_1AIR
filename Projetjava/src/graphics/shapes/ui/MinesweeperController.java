@@ -5,8 +5,8 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import graphics.shapes.SImage;
-import graphics.shapes.STable;
 import graphics.shapes.Shape;
+import graphics.shapes.SMinesweeper;
 import graphics.shapes.attributes.MinesweeperAttributes;
 import graphics.ui.Controller;
 
@@ -26,26 +26,27 @@ public class MinesweeperController extends Controller{
 	}
 
     public void mouseClicked(MouseEvent e) {
-    	if(!((STable)this.getModel()).getLose() && !((STable) this.getModel()).getWin()) {
+    	if(!((SMinesweeper) this.getModel()).getLose() && !((SMinesweeper) this.getModel()).getWin()) {
 	    	SImage shape = this.getTarget(e.getPoint());
 	    	if(shape != null && !this.getMinesweeperAttributes(shape).isDiscovered()) {
 		    	if(e.getButton() == MouseEvent.BUTTON3) {
-		    		this.getMinesweeperAttributes(shape).toggleFlagged();
+		    		((SMinesweeper)this.getModel()).toggleFlagged(shape);
 		    	}
-		    	if(e.getButton() == MouseEvent.BUTTON1) {
+		    	else if(e.getButton() == MouseEvent.BUTTON1) {
 		    		if(!this.getMinesweeperAttributes(shape).isFlagged()) {
-		    			if(!((STable) this.getModel()).findZero(shape)) {
+		    			if(!((SMinesweeper) this.getModel()).findZero(shape)) {
 		    				this.getMinesweeperAttributes(shape).toggleDiscovered();
 		    			}
 		    		}
 		    	}
+		    	((SMinesweeper)this.getModel()).win();
 	    	}
 	    	this.getView().repaint();
     	}
     }
 
 	public SImage getTarget(Point point) {
-		Iterator<ArrayList<SImage>> it = ((STable) this.getModel()).iterator();
+		Iterator<ArrayList<SImage>> it = ((SMinesweeper) this.getModel()).iterator();
 		SImage image;
 		Iterator<SImage> arrayIn;
 		while(it.hasNext()) {

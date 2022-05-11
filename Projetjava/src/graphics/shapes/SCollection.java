@@ -11,8 +11,10 @@ public class SCollection extends Shape {
 	private ArrayList<Float> dys;
 	private ArrayList<Float> zxs;
 	private ArrayList<Float> zys;
-	private ArrayList<Float> propx;
-	private ArrayList<Float> propy;
+	private ArrayList<Float> proptx;
+	private ArrayList<Float> propty;
+	private ArrayList<Float> propzx;
+	private ArrayList<Float> propzy;
 	
 	public SCollection() {
 		shapes = new ArrayList<Shape>();
@@ -20,8 +22,10 @@ public class SCollection extends Shape {
 		dys = new ArrayList<Float>();
 		zxs = new ArrayList<Float>();
 		zys = new ArrayList<Float>();
-		propx = new ArrayList<Float>();
-		propy = new ArrayList<Float>();
+		proptx = new ArrayList<Float>();
+		propty = new ArrayList<Float>();
+		propzx = new ArrayList<Float>();
+		propzy = new ArrayList<Float>();
 	}
 	
 	public Iterator<Shape> iterator() {
@@ -34,8 +38,10 @@ public class SCollection extends Shape {
 		dys.add((float) 0);
 		zxs.add((float) 0);
 		zys.add((float) 0);
-		propx.add(null);
-		propy.add(null);
+		proptx.add(null);
+		propty.add(null);
+		propzx.add(null);
+		propzy.add(null);
 		proportion();
 	}
 	
@@ -76,15 +82,17 @@ public class SCollection extends Shape {
 				maxy = rect.getCenterY();
 			}
 		}
-		moyx /= propx.size();
-		moyy /= propy.size();
+		moyx /= proptx.size();
+		moyy /= propty.size();
 		for(int i = 0; i < dxs.size(); i++) {
 			Rectangle r = shapes.get(i).getBounds();
 			if(maxx != minx) {
-					propx.set(i, ((float) r.getCenterX() - moyx)/(float) (maxx-minx));
+				proptx.set(i, ((float) r.getCenterX() - moyx)/(float) (maxx-minx));
+				propzx.set(i, ((float) r.getWidth())/(float) this.getBounds().getWidth());
 			}
 			if(maxy != miny) {
-				propy.set(i, ( (float)r.getCenterY() - moyy)/(float) (maxy-miny));
+				propty.set(i, ( (float)r.getCenterY() - moyy)/(float) (maxy-miny));
+				propzy.set(i, ((float) r.getHeight())/(float) this.getBounds().getHeight());
 			}
 		}
 	}
@@ -99,10 +107,10 @@ public class SCollection extends Shape {
 	public void zoom(int x, int y){
 		Point startLoc = getLoc();
 		for(int i = 0; i < dxs.size(); i++) {
-			zxs.set(i, zxs.get(i) + ((float) x) * Math.abs(propx.get(i)));
-			zys.set(i, zys.get(i) + ((float) y) * Math.abs(propy.get(i)));
-			dxs.set(i, dxs.get(i) + ((float) x) * propx.get(i)/2);
-			dys.set(i, dys.get(i) + ((float) y) * propy.get(i)/2);
+			zxs.set(i, zxs.get(i) + ((float) x) * Math.abs(propzx.get(i)));
+			zys.set(i, zys.get(i) + ((float) y) * Math.abs(propzy.get(i)));
+			dxs.set(i, dxs.get(i) + ((float) x) * proptx.get(i)/2);
+			dys.set(i, dys.get(i) + ((float) y) * propty.get(i)/2);
 		}
         Iterator<Shape> it = iterator();
         int i = 0;
